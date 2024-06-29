@@ -1,5 +1,7 @@
 from django.db import models
 
+from LMS_System.settings import AUTH_USER_MODEL
+
 NULLABLE = {"blank": True, "null": True}
 
 
@@ -7,6 +9,9 @@ class Course(models.Model):
     name = models.CharField(max_length=255, verbose_name="Название курса")
     preview = models.ImageField(upload_to="media", **NULLABLE, verbose_name="Превью")
     description = models.TextField(verbose_name="Описание курса")
+    owner = models.ForeignKey(
+        AUTH_USER_MODEL, on_delete=models.SET_NULL, **NULLABLE, verbose_name="Владелец"
+    )
 
     class Meta:
         verbose_name = "Курс"
@@ -22,6 +27,9 @@ class Lessons(models.Model):
     preview = models.ImageField(upload_to="media", verbose_name="Превью", **NULLABLE)
     video_link = models.CharField(max_length=255, verbose_name="Ссылка на видео")
     course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name="Курс")
+    owner = models.ForeignKey(
+        AUTH_USER_MODEL, on_delete=models.SET_NULL, **NULLABLE, verbose_name="Владелец"
+    )
 
     class Meta:
         verbose_name = "Урок"
