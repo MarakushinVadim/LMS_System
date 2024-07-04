@@ -6,10 +6,13 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
-from materials.models import Course, Lessons, Subscription
+from materials.models import Amounts, Course, Lessons, Subscription
 from materials.paginations import CustomPagination
-from materials.serializers import (CoursesDetailSerializer, CourseSerializer,
-                                   LessonsSerializer, SubscriptionSerializer)
+from materials.serializers import (AmountsSerializer, CoursesDetailSerializer,
+                                   CourseSerializer, LessonsSerializer,
+                                   SubscriptionSerializer)
+from materials.services import (create_stripe_price, create_stripe_product,
+                                create_stripe_session)
 from users.permissions import IsModerators, IsOwner
 
 
@@ -105,14 +108,32 @@ class SubscriptionAPIView(APIView):
     def post(self, request, *args, **kwargs):
         user = self.request.user
         course_id = self.request.data.get("course_id")
+        course_amount = self.request.data.get("course_amount")
         course_item = get_object_or_404(Course, id=course_id)
         subscription, created = Subscription.objects.get_or_create(
-            owner=user, course=course_item
+            owner=user, course=course_item, amount=course_amount
         )
         if not created:
             subscription.delete()
             message = "Подписка удалена"
         else:
+
             message = "Подписка добавлена"
 
         return Response({"message": message})
+
+
+class AmountsCreateAPIView(CreateAPIView):
+    """Эндпоинт для создания платежа"""
+
+    serializer_class = AmountsSerializer
+    queryset = Amounts.objects.all()
+
+    def perform_create(self, serializer):
+        payment = serializer.save(user=self.request.user)
+        product = create_stripe_product(payment.product)
+        price = create_stripe_price(amount=payment.amount)
+        session_id, session_url = create_stripe_session(price)
+        payment.session_id = session_id
+        payment.link = session_url
+        payment.save()

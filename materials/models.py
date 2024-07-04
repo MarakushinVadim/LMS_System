@@ -45,9 +45,6 @@ class Subscription(models.Model):
         AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Владелец"
     )
     course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name="Курс")
-    amount = models.PositiveIntegerField(**NULLABLE, verbose_name="Стоимость курса")
-    session_id = models.CharField(max_length=255, **NULLABLE, verbose_name="id сессии")
-    link = models.URLField(max_length=400, **NULLABLE, verbose_name="ссылка на оплату")
 
     class Meta:
         verbose_name = "Подписка"
@@ -55,3 +52,18 @@ class Subscription(models.Model):
 
         def __str__(self):
             return f"{self.owner} - подписка на курс {self.course}"
+
+
+class Amounts(models.Model):
+    user = models.ForeignKey(
+        AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Пользователь"
+    )
+    session_id = models.CharField(max_length=255, **NULLABLE, verbose_name="id сессии")
+    link = models.URLField(max_length=400, **NULLABLE, verbose_name="ссылка на оплату")
+    product = models.ForeignKey(
+        Course, on_delete=models.CASCADE, verbose_name="Курс", **NULLABLE
+    )
+    amount = models.PositiveIntegerField(verbose_name="Стоимость курса", **NULLABLE)
+
+    def __str__(self):
+        return f"Платеж {self.pk}"
