@@ -40,8 +40,10 @@ class Lessons(models.Model):
 
 
 class Subscription(models.Model):
-    owner = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Владелец')
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name='Курс')
+    owner = models.ForeignKey(
+        AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Владелец"
+    )
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name="Курс")
 
     class Meta:
         verbose_name = "Подписка"
