@@ -12,6 +12,7 @@ class Course(models.Model):
     owner = models.ForeignKey(
         AUTH_USER_MODEL, on_delete=models.SET_NULL, **NULLABLE, verbose_name="Владелец"
     )
+    amount = models.PositiveIntegerField(default=1000, verbose_name="Стоимость курса")
 
     class Meta:
         verbose_name = "Курс"
@@ -44,6 +45,9 @@ class Subscription(models.Model):
         AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Владелец"
     )
     course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name="Курс")
+    amount = models.PositiveIntegerField(**NULLABLE, verbose_name="Стоимость курса")
+    session_id = models.CharField(max_length=255, **NULLABLE, verbose_name="id сессии")
+    link = models.URLField(max_length=400, **NULLABLE, verbose_name="ссылка на оплату")
 
     class Meta:
         verbose_name = "Подписка"

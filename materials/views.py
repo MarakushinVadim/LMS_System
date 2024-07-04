@@ -14,20 +14,25 @@ from users.permissions import IsModerators, IsOwner
 
 
 class CourseViewSet(ModelViewSet):
+    """Эндпоинт для модели курсов"""
+
     queryset = Course.objects.all()
     pagination_class = CustomPagination
 
     def get_serializer_class(self):
+        """Функция для действия retrieve"""
         if self.action == "retrieve":
             return CoursesDetailSerializer
         return CourseSerializer
 
     def perform_create(self, serializer):
+        """Функция для действия create"""
         course = serializer.save()
         course.owner = self.request.user
         course.save()
 
     def get_permissions(self):
+        """Функция для проверки доступа"""
         if self.action == "create":
             self.permission_classes = (~IsModerators,)
         elif self.action in ["update", "retrieve"]:
@@ -38,6 +43,8 @@ class CourseViewSet(ModelViewSet):
 
 
 class LessonsCreateApiView(CreateAPIView):
+    """Эндпоинт для создания урока"""
+
     queryset = Lessons.objects.all()
     serializer_class = LessonsSerializer
     permission_classes = (
@@ -52,12 +59,16 @@ class LessonsCreateApiView(CreateAPIView):
 
 
 class LessonsListApiView(ListAPIView):
+    """Эндпоинт для просмотра уроков"""
+
     queryset = Lessons.objects.all()
     serializer_class = LessonsSerializer
     pagination_class = CustomPagination
 
 
 class LessonsRetrieveApiView(RetrieveAPIView):
+    """Эндпоинт для получения 1-го урока"""
+
     queryset = Lessons.objects.all()
     serializer_class = LessonsSerializer
     permission_classes = (
@@ -67,6 +78,8 @@ class LessonsRetrieveApiView(RetrieveAPIView):
 
 
 class LessonsUpdateApiView(UpdateAPIView):
+    """Эндпоинт для обновления урока"""
+
     queryset = Lessons.objects.all()
     serializer_class = LessonsSerializer
     permission_classes = (
@@ -76,12 +89,16 @@ class LessonsUpdateApiView(UpdateAPIView):
 
 
 class LessonsDestroyApiView(DestroyAPIView):
+    """Эндпоинт для удаления урока"""
+
     queryset = Lessons.objects.all()
     serializer_class = LessonsSerializer
     permission_classes = (IsAuthenticated, IsOwner | ~IsModerators)
 
 
 class SubscriptionAPIView(APIView):
+    """Эндпоинт для добавления/удаления подписки на курс"""
+
     queryset = Subscription.objects.all()
     serializer_class = SubscriptionSerializer
 
