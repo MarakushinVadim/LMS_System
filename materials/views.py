@@ -124,7 +124,14 @@ class SubscriptionAPIView(APIView):
 
 
 class AmountsCreateAPIView(CreateAPIView):
-    """Эндпоинт для создания платежа"""
+    """
+    Эндпоинт для создания платежа
+    необходимо корректно заполнить поля
+    обязательные поля - user, amount, product
+    user - ожидается ввод pk юзера,
+    amount - ожидается значение в int,
+    product - ожидается ввод pk курса
+    """
 
     serializer_class = AmountsSerializer
     queryset = Amounts.objects.all()

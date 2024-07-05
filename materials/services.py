@@ -1,6 +1,8 @@
 import stripe
 
-stripe.api_key = "sk_test_51PYoX62KQiV6vt1eiDoGPHm2bxQbeS6zfZBQuuOAFz4KMjXrRuXGRaLjov6zucCbaqV1TpvSHYEb29ViGL1hc6M000ZeTFgmh4"
+from LMS_System.settings import STRIPE_API_KEY
+
+stripe.api_key = STRIPE_API_KEY
 
 
 def create_stripe_product(product):
