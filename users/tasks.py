@@ -2,9 +2,7 @@ import datetime
 
 import pytz
 from celery import shared_task
-from django.core.mail import send_mail
 
-from LMS_System import settings
 from users.models import User
 
 
