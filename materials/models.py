@@ -13,6 +13,10 @@ class Course(models.Model):
         AUTH_USER_MODEL, on_delete=models.SET_NULL, **NULLABLE, verbose_name="Владелец"
     )
     amount = models.PositiveIntegerField(default=1000, verbose_name="Стоимость курса")
+    last_update_date = models.DateTimeField(
+        **NULLABLE,
+        verbose_name='дата и время последнего обновления'
+    )
 
     class Meta:
         verbose_name = "Курс"
@@ -45,6 +49,7 @@ class Subscription(models.Model):
         AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Владелец"
     )
     course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name="Курс")
+    amount = models.IntegerField(**NULLABLE, verbose_name='Цена курса')
 
     class Meta:
         verbose_name = "Подписка"

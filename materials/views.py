@@ -1,3 +1,5 @@
+import datetime
+
 from rest_framework.generics import (CreateAPIView, DestroyAPIView,
                                      ListAPIView, RetrieveAPIView,
                                      UpdateAPIView, get_object_or_404)
@@ -6,6 +8,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
+from LMS_System import settings
+from materials.tasks import check_courses
 from materials.models import Amounts, Course, Lessons, Subscription
 from materials.paginations import CustomPagination
 from materials.serializers import (AmountsSerializer, CoursesDetailSerializer,
@@ -33,6 +37,13 @@ class CourseViewSet(ModelViewSet):
         course = serializer.save()
         course.owner = self.request.user
         course.save()
+
+    def perform_update(self, serializer):
+        instance = serializer.save()
+        instance.last_update_date = datetime.datetime.now()
+        instance.save()
+        check_courses.delay(instance.pk)
+        return instance
 
     def get_permissions(self):
         """Функция для проверки доступа"""

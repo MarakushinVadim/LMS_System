@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -14,6 +16,7 @@ class User(AbstractUser):
     avatar = models.ImageField(
         upload_to="media/users_avatars", **NULLABLE, verbose_name="avatar"
     )
+    last_login = models.DateTimeField(default=datetime.now, verbose_name="Время последнего входа", **NULLABLE)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
