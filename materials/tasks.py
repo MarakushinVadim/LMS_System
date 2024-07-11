@@ -15,8 +15,8 @@ def check_courses(pk_course):
         for sub in subscription:
             recipient_list.append(sub.owner.email)
         send_mail(
-            subject=f'Курс {course.name} был обновлен',
-            message='Зайдите в курс чтобы посмотреть на обновления',
+            subject=f"Курс {course.name} был обновлен",
+            message="Зайдите в курс чтобы посмотреть на обновления",
             from_email=settings.EMAIL_HOST_USER,
             recipient_list=recipient_list,
         )

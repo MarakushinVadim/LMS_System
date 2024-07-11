@@ -9,7 +9,6 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
 from LMS_System import settings
-from materials.tasks import check_courses
 from materials.models import Amounts, Course, Lessons, Subscription
 from materials.paginations import CustomPagination
 from materials.serializers import (AmountsSerializer, CoursesDetailSerializer,
@@ -17,6 +16,7 @@ from materials.serializers import (AmountsSerializer, CoursesDetailSerializer,
                                    SubscriptionSerializer)
 from materials.services import (create_stripe_price, create_stripe_product,
                                 create_stripe_session)
+from materials.tasks import check_courses
 from users.permissions import IsModerators, IsOwner
 
 

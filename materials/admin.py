@@ -8,6 +8,6 @@ class CourseAdmin(admin.ModelAdmin):
     list_filter = (
         "id",
         "name",
-        'amount',
-        'last_update_date',
+        "amount",
+        "last_update_date",
     )
